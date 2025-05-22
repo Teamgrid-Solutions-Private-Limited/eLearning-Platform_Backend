@@ -107,4 +107,4 @@ The API documentation is available at `/api-docs` when running the server.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the Private License - see the LICENSE file for details. 
