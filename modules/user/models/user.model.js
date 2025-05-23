@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const { ROLES } = require('../../../shared/constants/roles');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -20,10 +19,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6
   },
-  role: {
-    type: String,
-    enum: Object.values(ROLES),
-    default: ROLES.STUDENT
+  role_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Role',
+    required: true
   },
   isActive: {
     type: Boolean,
@@ -45,6 +44,10 @@ userSchema.pre('save', async function(next) {
 userSchema.methods.comparePassword = async function(password) {
   return bcrypt.compare(password, this.password);
 };
+
+// Indexes
+userSchema.index({ email: 1 });
+userSchema.index({ role_id: 1 });
 
 const User = mongoose.model('User', userSchema);
 
