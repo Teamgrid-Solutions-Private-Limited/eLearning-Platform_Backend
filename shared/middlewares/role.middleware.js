@@ -1,18 +1,22 @@
-const { ROLE_PERMISSIONS } = require('../constants/roles');
+const Role = require('../../modules/user/models/role.model');
 
 const checkPermission = (requiredPermission) => {
-  return (req, res, next) => {
-    const userRole = req.user.role;
-    const userPermissions = ROLE_PERMISSIONS[userRole] || [];
+  return async (req, res, next) => {
+    try {
+      const role = await Role.findById(req.user.role_id);
+      console.log('Role fetched for permission check:', role);
+      
+      if (!role || !role.permissions.includes(requiredPermission)) {
+        return res.status(403).json({
+          status: 'error',
+          message: 'You do not have permission to perform this action'
+        });
+      }
 
-    if (!userPermissions.includes(requiredPermission)) {
-      return res.status(403).json({
-        status: 'error',
-        message: 'You do not have the required permission to perform this action'
-      });
+      next();
+    } catch (error) {
+      next(error);
     }
-
-    next();
   };
 };
 

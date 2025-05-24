@@ -13,12 +13,12 @@ console.log('MongoDB URI:', process.env.MONGODB_URI ? 'URI is set' : 'URI is not
 
 // Import routes
 const authoringRoutes = require('./modules/authoring/routes');
+const roleRoutes = require('./modules/user/routes/role.routes');
 /* Commented out other modules for now
 const scormRoutes = require('./modules/scorm/routes');
 const lmsRoutes = require('./modules/lms/routes');
 */
 const userRoutes = require('./modules/user/routes');
-
 
 // Import middlewares
 const { errorHandler } = require('./shared/middlewares/error.middleware');
@@ -36,13 +36,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
+// Mount routes
+app.use('/api', userRoutes);
 app.use('/api/authoring', authoringRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/roles', roleRoutes);
 /* Commented out other routes for now
 app.use('/api/scorm', scormRoutes);
 app.use('/api/lms', lmsRoutes);
-
 */
 
 // Error handling

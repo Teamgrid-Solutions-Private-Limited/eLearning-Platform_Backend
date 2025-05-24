@@ -29,7 +29,7 @@ router.get('/:id/progress', getModuleProgress);
 
 // Create new module (instructor/admin only)
 router.post('/',
-  authorize(ROLES.INSTRUCTOR, ROLES.ADMIN),
+  authorize(ROLES.AUTHOR, ROLES.INSTRUCTOR, ROLES.ADMIN),
   checkPermission('manage_modules'),
   createModule
 );

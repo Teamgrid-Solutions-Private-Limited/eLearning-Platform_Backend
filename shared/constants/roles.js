@@ -1,8 +1,9 @@
 module.exports = {
   ROLES: {
-    ADMIN: 'admin',
-    INSTRUCTOR: 'instructor',
-    STUDENT: 'student'
+    ADMIN: 'Admin',
+    INSTRUCTOR: 'Instructor',
+    STUDENT: 'Student',
+    AUTHOR: 'Author'
   },
   
   PERMISSIONS: {
@@ -11,7 +12,12 @@ module.exports = {
     VIEW_COURSES: 'view_courses',
     TAKE_COURSES: 'take_courses',
     MANAGE_SCORM: 'manage_scorm',
-    VIEW_REPORTS: 'view_reports'
+    VIEW_REPORTS: 'view_reports',
+    MANAGE_MODULES: 'manage_modules',
+    MANAGE_LESSONS: 'manage_lessons',
+    MANAGE_QUIZZES: 'manage_quizzes',
+    MANAGE_MEDIA: 'manage_media',
+    VIEW_ANALYTICS: 'view_analytics'
   },
   
   ROLE_PERMISSIONS: {
@@ -21,7 +27,12 @@ module.exports = {
       'view_courses',
       'take_courses',
       'manage_scorm',
-      'view_reports'
+      'view_reports',
+      'manage_modules',
+      'manage_lessons',
+      'manage_quizzes',
+      'manage_media',
+      'view_analytics'
     ],
     instructor: [
       'manage_courses',
@@ -33,6 +44,15 @@ module.exports = {
     student: [
       'view_courses',
       'take_courses'
+    ],
+    author: [
+      'view_courses',
+      'take_courses',
+      "manage_modules",
+      "manage_lessons",
+      "manage_quizzes",
+      "manage_media",
+      "view_analytics"
     ]
   }
 }; 
