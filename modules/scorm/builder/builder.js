@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const connectDB = require("./config/db");
-const Course = require("./models/Course");
+const Course = require("../../authoring/models/course.model");
 const { createScormPackage } = require("./utils/scormUtils");
 
 const run = async () => {
