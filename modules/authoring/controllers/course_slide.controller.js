@@ -1,18 +1,25 @@
 const CourseSlide = require('../models/course_slide.model');
-const CourseModule = require('../models/course_module.model');
+const CourseModule = require('../models/module.model');
+const Course = require('../models/course.model');
 const asyncHandler = require('../../../shared/middlewares/asyncHandler');
 const { validate } = require('../../../shared/middlewares/validate');
 const { ValidationError, NotFoundError, AuthorizationError } = require('../../../shared/errors');
 
 // Create new slide
 const createSlide = asyncHandler(async (req, res) => {
-  // Check if module exists and user has access
+  // Check if module exists
   const module = await CourseModule.findById(req.body.module_id);
   if (!module) {
     throw new NotFoundError('Module not found');
   }
 
-  if (module.author.toString() !== req.user.id) {
+  // Check if user has access to the course
+  const course = await Course.findById(module.course);
+  if (!course) {
+    throw new NotFoundError('Course not found');
+  }
+
+  if (course.author.toString() !== req.user.id) {
     throw new AuthorizationError('Not authorized to add slides to this module');
   }
 
@@ -67,9 +74,18 @@ const updateSlide = asyncHandler(async (req, res) => {
     throw new NotFoundError('Slide not found');
   }
 
-  // Check if user has access to the module
+  // Check if user has access to the course
   const module = await CourseModule.findById(slide.module_id);
-  if (module.author.toString() !== req.user.id) {
+  if (!module) {
+    throw new NotFoundError('Module not found');
+  }
+
+  const course = await Course.findById(module.course);
+  if (!course) {
+    throw new NotFoundError('Course not found');
+  }
+
+  if (course.author.toString() !== req.user.id) {
     throw new AuthorizationError('Not authorized to update this slide');
   }
 
@@ -90,9 +106,18 @@ const deleteSlide = asyncHandler(async (req, res) => {
     throw new NotFoundError('Slide not found');
   }
 
-  // Check if user has access to the module
+  // Check if user has access to the course
   const module = await CourseModule.findById(slide.module_id);
-  if (module.author.toString() !== req.user.id) {
+  if (!module) {
+    throw new NotFoundError('Module not found');
+  }
+
+  const course = await Course.findById(module.course);
+  if (!course) {
+    throw new NotFoundError('Course not found');
+  }
+
+  if (course.author.toString() !== req.user.id) {
     throw new AuthorizationError('Not authorized to delete this slide');
   }
 
@@ -115,13 +140,18 @@ const reorderSlides = asyncHandler(async (req, res) => {
   const { slides } = req.body;
   const moduleId = req.params.moduleId;
 
-  // Check if user has access to the module
+  // Check if user has access to the course
   const module = await CourseModule.findById(moduleId);
   if (!module) {
     throw new NotFoundError('Module not found');
   }
 
-  if (module.author.toString() !== req.user.id) {
+  const course = await Course.findById(module.course);
+  if (!course) {
+    throw new NotFoundError('Course not found');
+  }
+
+  if (course.author.toString() !== req.user.id) {
     throw new AuthorizationError('Not authorized to reorder slides in this module');
   }
 
@@ -149,9 +179,18 @@ const toggleSlideStatus = asyncHandler(async (req, res) => {
     throw new NotFoundError('Slide not found');
   }
 
-  // Check if user has access to the module
+  // Check if user has access to the course
   const module = await CourseModule.findById(slide.module_id);
-  if (module.author.toString() !== req.user.id) {
+  if (!module) {
+    throw new NotFoundError('Module not found');
+  }
+
+  const course = await Course.findById(module.course);
+  if (!course) {
+    throw new NotFoundError('Course not found');
+  }
+
+  if (course.author.toString() !== req.user.id) {
     throw new AuthorizationError('Not authorized to update this slide');
   }
 

@@ -5,7 +5,7 @@ const createSlideSchema = Joi.object({
   type: Joi.string()
     .valid('video', 'html', 'quiz')
     .required(),
-  content: Joi.alternatives().conditional('type', {
+  content: Joi.object().when('type', {
     is: 'video',
     then: Joi.object({
       videoUrl: Joi.string().uri().required(),
@@ -17,7 +17,7 @@ const createSlideSchema = Joi.object({
           url: Joi.string().uri().required()
         })
       )
-    }),
+    }).required(),
     is: 'html',
     then: Joi.object({
       html: Joi.string().required(),
@@ -30,7 +30,7 @@ const createSlideSchema = Joi.object({
           alt: Joi.string()
         })
       )
-    }),
+    }).required(),
     is: 'quiz',
     then: Joi.object({
       quizId: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
@@ -39,8 +39,8 @@ const createSlideSchema = Joi.object({
       showResults: Joi.boolean().default(true),
       allowRetake: Joi.boolean().default(false),
       maxAttempts: Joi.number().min(1)
-    })
-  }).required(),
+    }).required()
+  }),
   order: Joi.number().min(0).required(),
   title: Joi.string().required().trim(),
   isActive: Joi.boolean().default(true)

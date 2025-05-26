@@ -30,7 +30,7 @@ const createQuestionSchema = Joi.object({
     })
   ).when('type', {
     is: 'matching',
-    then: Joi.required().min(2),
+    then: Joi.array().min(2).required(),
     otherwise: Joi.forbidden()
   }),
   feedback: Joi.object({
