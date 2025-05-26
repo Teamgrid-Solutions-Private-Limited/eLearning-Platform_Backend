@@ -13,7 +13,6 @@ class MediaService {
       ...data,
       author: authorId,
       url: uploadResult.url,
-      type: file.mimetype,
       size: file.size,
       metadata: {
         originalName: file.originalname,

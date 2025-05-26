@@ -1,45 +1,61 @@
 const Joi = require('joi');
 
 const createMediaSchema = Joi.object({
-  title: Joi.string().required().min(3).max(100),
-  description: Joi.string().allow(''),
+  filename: Joi.string().required(),
+  originalName: Joi.string().required(),
+  url: Joi.string().uri().required(),
   type: Joi.string().required().valid('image', 'video', 'audio', 'document', 'other'),
-  metadata: Joi.object({
+  mimeType: Joi.string().required(),
+  size: Joi.number().required(),
+  dimensions: Joi.object({
     width: Joi.number(),
-    height: Joi.number(),
-    duration: Joi.number(),
-    format: Joi.string(),
-    size: Joi.number(),
-    originalName: Joi.string(),
-    mimeType: Joi.string()
+    height: Joi.number()
   }),
-  tags: Joi.array().items(Joi.string()),
-  isPublic: Joi.boolean(),
-  accessControl: Joi.object({
-    roles: Joi.array().items(Joi.string()),
-    users: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
+  duration: Joi.number(),
+  metadata: Joi.object({
+    title: Joi.string(),
+    description: Joi.string().allow(''),
+    tags: Joi.array().items(Joi.string()),
+    alt: Joi.string(),
+    caption: Joi.string()
+  }),
+  uploadedBy: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
+  course: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+  isPublic: Joi.boolean().default(false),
+  status: Joi.string().valid('processing', 'ready', 'error').default('processing'),
+  error: Joi.object({
+    message: Joi.string(),
+    code: Joi.string()
   })
 });
 
 const updateMediaSchema = Joi.object({
-  title: Joi.string().min(3).max(100),
-  description: Joi.string().allow(''),
-  metadata: Joi.object({
+  filename: Joi.string(),
+  originalName: Joi.string(),
+  url: Joi.string().uri(),
+  type: Joi.string().valid('image', 'video', 'audio', 'document', 'other'),
+  mimeType: Joi.string(),
+  size: Joi.number(),
+  dimensions: Joi.object({
     width: Joi.number(),
-    height: Joi.number(),
-    duration: Joi.number(),
-    format: Joi.string(),
-    size: Joi.number(),
-    originalName: Joi.string(),
-    mimeType: Joi.string()
+    height: Joi.number()
   }),
-  tags: Joi.array().items(Joi.string()),
+  duration: Joi.number(),
+  metadata: Joi.object({
+    title: Joi.string(),
+    description: Joi.string().allow(''),
+    tags: Joi.array().items(Joi.string()),
+    alt: Joi.string(),
+    caption: Joi.string()
+  }),
+  uploadedBy: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
+  course: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
   isPublic: Joi.boolean(),
-  accessControl: Joi.object({
-    roles: Joi.array().items(Joi.string()),
-    users: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
-  }),
-  status: Joi.string().valid('active', 'archived', 'deleted')
+  status: Joi.string().valid('processing', 'ready', 'error'),
+  error: Joi.object({
+    message: Joi.string(),
+    code: Joi.string()
+  })
 });
 
 module.exports = {

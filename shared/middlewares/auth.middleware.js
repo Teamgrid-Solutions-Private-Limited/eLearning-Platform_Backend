@@ -10,7 +10,11 @@ const auth = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    req.user = {
+      id: decoded.id,
+      role_id: decoded.role_id,
+      roleName: decoded.roleName
+    };
     next();
   } catch (error) {
     res.status(401).json({
@@ -22,7 +26,7 @@ const auth = async (req, res, next) => {
 
 const authorize = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(req.user.roleName)) {
       return res.status(403).json({
         status: 'error',
         message: 'You do not have permission to perform this action'

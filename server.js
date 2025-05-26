@@ -7,14 +7,19 @@ const morgan = require('morgan');
 const bodyParser = require("body-parser");
 const path = require('path');
 const connectDB = require('@shared/config/db');
+const { initializeDirectories } = require('./shared/utils/initDirectories');
+
+// Verify environment variables
+console.log('MongoDB URI:', process.env.MONGODB_URI ? 'URI is set' : 'URI is not set');
 
 // Import routes
 const authoringRoutes = require('./modules/authoring/routes');
+const roleRoutes = require('./modules/user/routes/role.routes');
 /* Commented out other modules for now
 const scormRoutes = require('./modules/scorm/routes');
 const lmsRoutes = require('./modules/lms/routes');
-const userRoutes = require('./modules/user/routes');
 */
+const userRoutes = require('./modules/user/routes');
 
 // Import middlewares
 const { errorHandler } = require('./shared/middlewares/error.middleware');
@@ -32,12 +37,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
+// Mount routes
+app.use('/api', userRoutes);
 app.use('/api/authoring', authoringRoutes);
+app.use('/api/roles', roleRoutes);
 /* Commented out other routes for now
 app.use('/api/scorm', scormRoutes);
 app.use('/api/lms', lmsRoutes);
-app.use('/api/users', userRoutes);
 */
 
 // Error handling
@@ -49,6 +55,7 @@ const PORT = process.env.PORT || 3000;
 const startServer = async () => {
   try {
     await connectDB();
+    await initializeDirectories();
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

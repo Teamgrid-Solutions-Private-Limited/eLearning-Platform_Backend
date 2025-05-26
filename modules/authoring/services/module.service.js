@@ -1,5 +1,5 @@
 const Module = require('../models/module.model');
-const Course = require('../models/module.model');
+const Course = require('../models/course.model');
 const { NotFoundError, AuthorizationError } = require('@shared/errors');
 
 class ModuleService {

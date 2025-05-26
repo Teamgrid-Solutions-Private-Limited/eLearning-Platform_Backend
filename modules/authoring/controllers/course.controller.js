@@ -1,5 +1,4 @@
 const Course = require('../models/course.model');
-const ScormBuilder = require('../../scorm/builder/builder');
 const asyncHandler = require('../../../shared/middlewares/asyncHandler');
 const { fileUtils } = require('../../../shared/utils/fileUtils');
 

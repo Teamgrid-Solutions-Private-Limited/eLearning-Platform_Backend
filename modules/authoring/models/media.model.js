@@ -56,9 +56,21 @@ const mediaSchema = new mongoose.Schema({
     enum: ['processing', 'ready', 'error'],
     default: 'processing'
   },
+  isDeleted: {
+    type: Boolean,
+    default: false
+  },
+  thumbnailUrl: {
+    type: String
+  },
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   error: {
     message: String,
-    code: String
+    code: String,
+    at: Date
   }
 }, {
   timestamps: true,
@@ -90,6 +102,7 @@ mediaSchema.index({ uploadedBy: 1, type: 1 });
 mediaSchema.index({ course: 1 });
 mediaSchema.index({ 'metadata.tags': 1 });
 mediaSchema.index({ status: 1 });
+mediaSchema.index({ isDeleted: 1 });
 
 // Pre-save middleware to validate file type
 mediaSchema.pre('save', function(next) {
